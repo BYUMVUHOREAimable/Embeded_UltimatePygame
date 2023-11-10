@@ -3,10 +3,6 @@ from sys import exit
 from random import randint, choice
 import serial
 
-from runner_video import display_score, obstacle_timer, collision_sprite, game_name, game_name_rect, game_message, \
-    game_message_rect, Obstacle
-
-
 ser = serial.Serial('COM11', 9600)
 
 
@@ -36,11 +32,11 @@ class Player(pygame.sprite.Sprite):
 
         keys = pygame.key.get_pressed()
         if self.rect.bottom >= 300 and joystickY == 0:
-            self.gravity = -80
+            self.gravity = -20
             self.jump_sound.play()
 
     def apply_gravity(self):
-        self.gravity += 15
+        self.gravity += 1
         self.rect.y += self.gravity
         if self.rect.bottom >= 300:
             self.rect.bottom = 300
@@ -58,7 +54,6 @@ class Player(pygame.sprite.Sprite):
         self.player_input()
         self.apply_gravity()
         self.animation_state()
-
 
 class Obstacle(pygame.sprite.Sprite):
     def __init__(self, type):
@@ -79,7 +74,7 @@ class Obstacle(pygame.sprite.Sprite):
 
         self.animation_index = 0
         self.image = self.frames[self.animation_index]
-        self.rect = self.image.get_rect(midbottom=(randint(900, 1100), y_pos))
+        self.rect = self.image.get_rect(midbottom=(randint(700, 7000), y_pos))
 
     def animation_state(self):
         self.animation_index += 0.1
@@ -95,7 +90,6 @@ class Obstacle(pygame.sprite.Sprite):
     def destroy(self):
         if self.rect.x <= -100:
             self.kill()
-
 
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time
@@ -195,3 +189,4 @@ while True:
 
     pygame.display.update()
     clock.tick(60)
+
